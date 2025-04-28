@@ -1,0 +1,172 @@
+//Main
+package com.aula;
+import java.util.Scanner;
+import com.aula.model.Combo;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("=== Menu de Combos ===");
+        System.out.println("1 – Combo Master");
+        System.out.println("2 – Super Combo");
+        System.out.print("Sua escolha: ");
+        int escolha = in.nextInt();
+
+        ComboFacade facade = new ComboFacade();
+        
+        
+        Combo combo = facade.criarCombo(escolha);  
+
+        combo.exibirItens(); 
+        System.out.printf("Total a pagar: R$ %.2f%n", combo.getPrecoTotal()); 
+    }
+}
+
+//Burger
+package com.aula.model;
+
+public class Burger implements ItemCombo {
+
+    private String nome;
+    private double preco;
+
+    public Burger(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public double getPreco() {
+        return preco;
+    }
+}
+
+//ItemCombo
+package com.aula.model;
+
+public interface ItemCombo {
+    String getNome();    
+    double getPreco();   
+}
+
+//Sobremesa
+package com.aula.model;
+
+public class Sobremesa implements ItemCombo {
+    private String nome;
+    private double preco;
+
+    public Sobremesa(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public double getPreco() {
+        return preco;
+    }
+}
+
+//Bebida
+package com.aula.model;
+
+public class Bebida implements ItemCombo {
+    private String nome;
+    private double preco;
+
+    public Bebida(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public double getPreco() {
+        return preco;
+    }
+
+    public static Bebida refrigerante() {
+        return new Bebida("Refrigerante", 5.00);
+    }
+
+    public static Bebida suco() {
+        return new Bebida("Suco", 4.50);
+    }
+}
+//ComboFacade
+package com.aula;
+
+import com.aula.model.Bebida;
+import com.aula.model.Burger;
+import com.aula.model.Combo;
+import com.aula.model.Sobremesa;
+
+public class ComboFacade {
+    public Combo criarCombo(int codigoCombo) {
+        Combo combo = new Combo(); 
+
+        switch (codigoCombo) {
+            case 1:
+                combo.adicionarItem(new Burger("Big Cheddar", 10.00)); 
+                combo.adicionarItem(new Bebida("Refrigerante", 4.00));  
+                combo.adicionarItem(new Sobremesa("Brownie", 5.00));  
+                break;
+            case 2:
+                combo.adicionarItem(new Burger("Cheeseburger", 8.00));  
+                combo.adicionarItem(new Bebida("Suco", 3.50));  
+                combo.adicionarItem(new Sobremesa("Sorvete", 6.00));  
+                break;
+            default:
+                System.out.println("Opção de combo inválida.");
+                break;
+        }
+        return combo;  
+    }
+}
+//Combo
+package com.aula.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Combo {
+    private List<ItemCombo> itens;
+
+    public Combo() {
+        this.itens = new ArrayList<>();
+    }
+
+    public void adicionarItem(ItemCombo item) {
+        itens.add(item);
+    }
+
+    public void exibirItens() {
+        for (ItemCombo item : itens) {
+            System.out.println(item.getNome() + " - R$ " + item.getPreco());
+        }
+    }
+
+    public double getPrecoTotal() {
+        double total = 0;
+        for (ItemCombo item : itens) {
+            total += item.getPreco();
+        }
+        return total;
+    }
+}
+
